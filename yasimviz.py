@@ -308,8 +308,10 @@ def process_component_or_weight(plotter, components, component_type, color_key, 
                 'mass', 'N/A') if component_type == 'ballasts' else component.get('capacity', 'N/A')
 
             # Determine which mass to use based on component type
-            mass_value = mass_prop if mass_prop != 'N/A' else mass
-            label_text = f'{singular_type} {ids[color_key]}: {mass_value} lbs'
+            if component_type == 'weights' and mass_prop != 'N/A':
+                label_text = f'{singular_type} {ids[color_key]}: {mass_prop}'
+            else:
+                label_text = f'{singular_type} {ids[color_key]}: {mass} lbs'
 
             plotter.add_mesh(
                 sphere_polydata, color=COLORS[color_key], show_edges=False, label=label_text)
