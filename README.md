@@ -96,6 +96,7 @@ The script parses the YASim XML file to extract data related to various aircraft
 - **`z`**: Rotate view around the z-axis.
 - **Up Arrow**: Zoom in.
 - **Down Arrow**: Zoom out.
+- **`t`**: Cycle transparency in increments of 0.1.
 
 ## Code Overview
 
