@@ -11,6 +11,8 @@ A Python tool for visualizing YASim flight model XML data in 3D, using PyVista f
 - **Support for Various Components**: Visualize different types of components such as fuselages, wings, and stabilizers, as well as weight elements like tanks and ballasts.
 - **Easy Integration**: Seamlessly visualize YASim XML flight model data with minimal setup and configuration.
 
+![Screenshot](YASimViz-screenshot.png)
+
 ## Requirements
 
 - Python 3.x
