@@ -55,25 +55,25 @@ python yasimviz.py <xml_file> [options]
 1. **Visualize without point labels and transparency**:
 
     ```bash
-    python yasimviz.py path/to/your/file.xml
+    python yasimviz.py path/to/your/aircraft-yasim.xml
     ```
 
 2. **Visualize with point labels**:
 
     ```bash
-    python yasimviz.py path/to/your/file.xml -l
+    python yasimviz.py path/to/your/aircraft-yasim.xml -l
     ```
 
 3. **Visualize with weight elements**:
 
     ```bash
-    python yasimviz.py path/to/your/file.xml -w
+    python yasimviz.py path/to/your/aircraft-yasim.xml -w
     ```
 
 4. **Visualize with a custom background image and semi-transparency**:
 
     ```bash
-    python yasimviz.py path/to/your/file.xml -t -b path/to/background.jpg
+    python yasimviz.py path/to/your/aircraft-yasim.xml -t -b path/to/background.jpg
     ```
 
 ## Functionality
