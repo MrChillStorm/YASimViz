@@ -9,6 +9,7 @@ A Python tool for visualizing YASim flight model XML data in 3D, using PyVista f
 - **Interactive Controls**: Rotate, zoom, and reset the view to inspect the model from various angles and distances.
 - **Component Labels**: Optionally display labels for different components to facilitate identification and analysis.
 - **Support for Various Components**: Visualize different types of components such as fuselages, wings, and stabilizers, as well as weight elements like tanks and ballasts.
+- **Measurement Widget**: Use the measurement widget to interactively measure distances between two points with left mouse clicks. Toggle the widget on and off using the `m` key to avoid accidental measurements and keep the interface uncluttered.
 - **Easy Integration**: Seamlessly visualize YASim XML flight model data with minimal setup and configuration.
 
 ![Screenshot](YASimViz-screenshot.png)
@@ -97,6 +98,7 @@ The script parses the YASim XML file to extract data related to various aircraft
 - **Up Arrow**: Zoom in.
 - **Down Arrow**: Zoom out.
 - **`t`**: Cycle transparency in increments of 0.1.
+- **`m` Key**: Toggles the measurement widget on and off.
 
 ## Code Overview
 
