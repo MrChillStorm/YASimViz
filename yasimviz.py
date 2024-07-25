@@ -5,7 +5,7 @@ import pyvista as pv
 import numpy as np
 import argparse
 
-POINT_LABEL_FONT_SIZE = 28       # Adjust point label font size to your preference
+POINT_LABEL_FONT_SIZE = 16       # Adjust point label font size to your preference
 THICKNESS_TO_CHORD_RATIO = 0.12  # Sets flight surface thickness to a typical 12%
 WEIGHT_SPHERE_RADIUS = 0.20      # Radius of the weight item spheres
 
