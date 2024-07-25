@@ -5,7 +5,7 @@ import pyvista as pv
 import numpy as np
 import argparse
 
-POINT_LABEL_FONT_SIZE = 16       # Adjust point label font size to your preference
+POINT_LABEL_FONT_SIZE = 28       # Adjust point label font size to your preference
 THICKNESS_TO_CHORD_RATIO = 0.12  # Sets flight surface thickness to a typical 12%
 WEIGHT_SPHERE_RADIUS = 0.20      # Radius of the weight item spheres
 
@@ -335,6 +335,9 @@ def process_component_or_weight(plotter, components, component_type, color_key, 
         ids[color_key] += 1
 
 
+# Assuming COLORS and process_component_or_weight are defined elsewhere
+
+
 def visualize_with_pyvista(components, show_labels=False, transparency=False, weights=False, background_image=None):
     plotter = pv.Plotter()
 
@@ -393,6 +396,18 @@ def visualize_with_pyvista(components, show_labels=False, transparency=False, we
         plotter.camera.zoom(0.99)
         plotter.render()
 
+    # Function to cycle transparency
+    def cycle_transparency():
+        nonlocal alpha
+        # Increment by 0.1 and round to avoid floating point issues
+        alpha = round(alpha + 0.1, 1)
+        if alpha > 1.0:
+            alpha = 0.1
+        # Update transparency for all components
+        for actor in plotter.actors.values():
+            actor.GetProperty().SetOpacity(alpha)
+        plotter.render()
+
     # Bind the reset view function to the 'c' key
     plotter.add_key_event('c', reset_view)
     plotter.add_key_event('x', rotate_x)
@@ -400,6 +415,7 @@ def visualize_with_pyvista(components, show_labels=False, transparency=False, we
     plotter.add_key_event('z', rotate_z)
     plotter.add_key_event('Up', zoom_in)
     plotter.add_key_event('Down', zoom_out)
+    plotter.add_key_event('t', cycle_transparency)
 
     # Show the plot
     plotter.show()
