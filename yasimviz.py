@@ -335,9 +335,6 @@ def process_component_or_weight(plotter, components, component_type, color_key, 
         ids[color_key] += 1
 
 
-# Assuming COLORS and process_component_or_weight are defined elsewhere
-
-
 def visualize_with_pyvista(components, show_labels=False, transparency=False, weights=False, background_image=None):
     plotter = pv.Plotter()
 
@@ -408,6 +405,19 @@ def visualize_with_pyvista(components, show_labels=False, transparency=False, we
             actor.GetProperty().SetOpacity(alpha)
         plotter.render()
 
+    # Function to toggle measurement widget
+    measurement_state = [False]
+
+    def toggle_measurement():
+        if measurement_state[0]:
+            # Disable measurement widget
+            plotter.clear_measure_widgets()
+        else:
+            # Enable measurement widget
+            plotter.add_measurement_widget(color='green')
+        plotter.render()
+        measurement_state[0] = not measurement_state[0]
+
     # Bind the reset view function to the 'c' key
     plotter.add_key_event('c', reset_view)
     plotter.add_key_event('x', rotate_x)
@@ -416,6 +426,7 @@ def visualize_with_pyvista(components, show_labels=False, transparency=False, we
     plotter.add_key_event('Up', zoom_in)
     plotter.add_key_event('Down', zoom_out)
     plotter.add_key_event('t', cycle_transparency)
+    plotter.add_key_event('m', toggle_measurement)
 
     # Show the plot
     plotter.show()
