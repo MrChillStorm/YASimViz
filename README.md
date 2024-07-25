@@ -16,7 +16,6 @@ A Python tool for visualizing YASim flight model XML data in 3D, using PyVista f
 - Python 3.x
 - `pyvista` library
 - `numpy` library
-- `argparse` library (standard library)
 
 ## Installation
 
