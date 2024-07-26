@@ -439,8 +439,14 @@ def process_component_or_weight(
                     component, component_type)
             faces = np.hstack([[len(face)] + face for face in faces])
             mesh = pv.PolyData(vertices, faces)
-            add_mesh_with_options(plotter, mesh, COLORS[color_key], f'{
-                                  singular_type} {ids[color_key]}', alpha)
+            smoothed_mesh = mesh.smooth(n_iter=20, relaxation_factor=0.01)
+            add_mesh_with_options(
+                plotter,
+                smoothed_mesh,
+                COLORS[color_key],
+                f'{singular_type} {
+                    ids[color_key]}',
+                alpha)
             if show_labels:
                 add_label_at_offset(
                     plotter,
