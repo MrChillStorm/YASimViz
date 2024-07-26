@@ -2,6 +2,7 @@
 
 import xml.etree.ElementTree as ET
 import pyvista as pv
+import os
 import numpy as np
 import argparse
 
@@ -458,10 +459,21 @@ def visualize_with_pyvista(
         background_image=None):
     plotter = pv.Plotter()
 
-    if background_image:
-        plotter.add_background_image(
-            background_image, scale=1.0, auto_resize=True, as_global=False)
+    # Handle background image
+    if background_image and os.path.isfile(background_image):
+        try:
+            plotter.add_background_image(
+                background_image,
+                scale=1.0,
+                auto_resize=True,
+                as_global=False)
+        except FileNotFoundError:
+            print(
+                f"Warning: The background image file '{background_image}' could not be loaded. It will be ignored.")
     else:
+        if background_image:
+            print(
+                f"Warning: The background image file '{background_image}' does not exist. It will be ignored.")
         plotter.set_background(COLORS['background'])
 
     alpha = 0.5 if transparency or weights else 1.0
@@ -471,30 +483,34 @@ def visualize_with_pyvista(
     if weights:
         # Process weight components first
         for weight_type in ['tanks', 'ballasts', 'weights']:
-            process_component_or_weight(plotter,
-                                        components,
-                                        weight_type,
-                                        weight_type[:-1],
-                                        ids,
-                                        COLORS,
-                                        alpha,
-                                        show_labels=show_labels,
-                                        weights=True)
+            process_component_or_weight(
+                plotter,
+                components,
+                weight_type,
+                weight_type[:-1],
+                ids,
+                COLORS,
+                alpha,
+                show_labels=show_labels,
+                weights=True
+            )
 
         # Add legend after all components are processed
         plotter.add_legend()
 
     # Process non-weight components
     for component_type in ['fuselages', 'wings', 'hstabs', 'vstabs', 'mstabs']:
-        process_component_or_weight(plotter,
-                                    components,
-                                    component_type,
-                                    component_type[:-1],
-                                    ids,
-                                    COLORS,
-                                    alpha,
-                                    show_labels=show_labels,
-                                    weights=False)
+        process_component_or_weight(
+            plotter,
+            components,
+            component_type,
+            component_type[:-1],
+            ids,
+            COLORS,
+            alpha,
+            show_labels=show_labels,
+            weights=False
+        )
 
     if not weights:
         # Add legend after all components are processed
@@ -581,13 +597,32 @@ def main():
                         help='Path to a background image file.')
     args = parser.parse_args()
 
-    components = parse_yasim_file(args.xml_file)
+    # Check if XML file exists
+    if not os.path.isfile(args.xml_file):
+        print(f"Error: The XML file '{args.xml_file}' does not exist.")
+        return
+
+    try:
+        components = parse_yasim_file(args.xml_file)
+    except Exception as e:
+        print(f"Error parsing XML file: {e}")
+        return
+
+    # Check if background image file exists (if provided)
+    if args.background_image and not os.path.isfile(args.background_image):
+        print(
+            f"Warning: The background image file '{
+                args.background_image}' does not exist. It will be ignored.")
+        background_image = None
+    else:
+        background_image = args.background_image
+
     visualize_with_pyvista(
         components,
         show_labels=args.labels,
         transparency=args.transparency,
         weights=args.weights,
-        background_image=args.background_image
+        background_image=background_image
     )
 
 
