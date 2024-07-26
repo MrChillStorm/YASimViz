@@ -23,15 +23,75 @@ COLORS = {
 }
 
 DEFAULTS = {
-    "fuselages": {'ax': 0, 'ay': 0, 'az': 0, 'bx': 0, 'by': 0, 'bz': 0, 'width': 0, 'taper': 1.0, 'midpoint': 0.5},
-    "wings": {'x': 0, 'y': 0, 'z': 0, 'length': 0, 'chord': 0, 'taper': 1.0, 'sweep': 0.0, 'dihedral': 0.0, 'incidence': 0.0, 'twist': 0.0},
-    "hstabs": {'x': 0, 'y': 0, 'z': 0, 'length': 0, 'chord': 0, 'taper': 1.0, 'sweep': 0.0, 'dihedral': 0.0, 'incidence': 0.0, 'twist': 0.0},
-    "vstabs": {'x': 0, 'y': 0, 'z': 0, 'length': 0, 'chord': 0, 'taper': 1.0, 'sweep': 0.0, 'dihedral': 90.0, 'incidence': 0.0, 'twist': 0.0},
-    "mstabs": {'x': 0, 'y': 0, 'z': 0, 'length': 0, 'chord': 0, 'taper': 1.0, 'sweep': 0.0, 'dihedral': 0.0, 'incidence': 0.0, 'twist': 0.0},
-    "tanks": {'x': 0, 'y': 0, 'z': 0, 'capacity': 0},
-    "ballasts": {'x': 0, 'y': 0, 'z': 0, 'mass': 0},
-    "weights": {'x': 0, 'y': 0, 'z': 0, 'mass-prop': 'N/A'}
-}
+    "fuselages": {
+        'ax': 0,
+        'ay': 0,
+        'az': 0,
+        'bx': 0,
+        'by': 0,
+        'bz': 0,
+        'width': 0,
+        'taper': 1.0,
+        'midpoint': 0.5},
+    "wings": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'length': 0,
+        'chord': 0,
+        'taper': 1.0,
+        'sweep': 0.0,
+        'dihedral': 0.0,
+        'incidence': 0.0,
+        'twist': 0.0},
+    "hstabs": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'length': 0,
+        'chord': 0,
+        'taper': 1.0,
+        'sweep': 0.0,
+        'dihedral': 0.0,
+        'incidence': 0.0,
+        'twist': 0.0},
+    "vstabs": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'length': 0,
+        'chord': 0,
+        'taper': 1.0,
+        'sweep': 0.0,
+        'dihedral': 90.0,
+        'incidence': 0.0,
+        'twist': 0.0},
+    "mstabs": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'length': 0,
+        'chord': 0,
+        'taper': 1.0,
+        'sweep': 0.0,
+        'dihedral': 0.0,
+        'incidence': 0.0,
+        'twist': 0.0},
+    "tanks": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'capacity': 0},
+    "ballasts": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'mass': 0},
+    "weights": {
+        'x': 0,
+        'y': 0,
+        'z': 0,
+        'mass-prop': 'N/A'}}
 
 
 def parse_yasim_file(file_path):
@@ -114,7 +174,8 @@ def generate_fuselage_vertices_and_faces(fuselage, num_segments=16):
     # Combine vertices
     vertices = np.array(front_vertices + mid_vertices + back_vertices)
 
-    # Define faces by connecting corresponding vertices of front, middle, and back circles
+    # Define faces by connecting corresponding vertices of front, middle, and
+    # back circles
     faces = []
     num_front = len(front_vertices)
     num_mid = len(mid_vertices)
@@ -161,7 +222,8 @@ def generate_component_vertices_and_faces(component, component_type):
         span_offset     # z direction remains unchanged
     ])
 
-    # Define the thickness of the stabilizer using a typical thickness-to-chord ratio
+    # Define the thickness of the stabilizer using a typical
+    # thickness-to-chord ratio
     root_thickness = chord * THICKNESS_TO_CHORD_RATIO
     tip_thickness = tip_chord * THICKNESS_TO_CHORD_RATIO
 
@@ -197,13 +259,15 @@ def generate_component_vertices_and_faces(component, component_type):
         [0, 0, 1]
     ])
 
-    # Translate tip vertices to align with mid-chord, apply twist, and translate back
+    # Translate tip vertices to align with mid-chord, apply twist, and
+    # translate back
     tip_vertices_centered = [
         vertex - mid_chord_position for vertex in tip_vertices]
     twisted_tip_vertices_centered = [
         np.dot(twist_matrix, vertex) for vertex in tip_vertices_centered]
     twisted_tip_vertices = [
-        vertex + mid_chord_position for vertex in twisted_tip_vertices_centered]
+        vertex +
+        mid_chord_position for vertex in twisted_tip_vertices_centered]
 
     # Combine root and twisted tip vertices
     vertices = np.array(root_vertices + twisted_tip_vertices)
@@ -215,7 +279,8 @@ def generate_component_vertices_and_faces(component, component_type):
     # Translate vertices to move the root midpoint to the origin
     translated_vertices = vertices - root_midpoint
 
-    # Apply incidence rotation around the z-axis (left-right tilt) in the reversed direction
+    # Apply incidence rotation around the z-axis (left-right tilt) in the
+    # reversed direction
     incidence_radians = np.radians(-incidence)
     incidence_matrix = np.array([
         [np.cos(incidence_radians), -np.sin(incidence_radians), 0],
@@ -249,33 +314,64 @@ def generate_component_vertices_and_faces(component, component_type):
         [1, 5, 6, 2]   # Side face
     ]
 
-    # If the component is on the negative side of the y-axis, mirror it and offset it to the correct side
+    # If the component is on the negative side of the y-axis, mirror it and
+    # offset it to the correct side
     if y < 0:
         final_vertices[:, 1] = -final_vertices[:, 1] - 2 * abs(y)
 
     return final_vertices, faces
 
 
-def create_sphere_polydata(radius, center, theta_resolution=8, phi_resolution=8):
-    return pv.Sphere(radius=radius, center=center,
-                     theta_resolution=theta_resolution, phi_resolution=phi_resolution)
+def create_sphere_polydata(
+        radius,
+        center,
+        theta_resolution=8,
+        phi_resolution=8):
+    return pv.Sphere(
+        radius=radius,
+        center=center,
+        theta_resolution=theta_resolution,
+        phi_resolution=phi_resolution)
 
 
 def get_center_of_mass(vertices):
     return np.mean(vertices, axis=0)
 
 
-def add_label_at_offset(plotter, vertices, label, label_id, offset=(0, 0, 1), show_labels=False):
+def add_label_at_offset(
+        plotter,
+        vertices,
+        label,
+        label_id,
+        offset=(
+            0,
+            0,
+            1),
+        show_labels=False):
     if show_labels:
         center = get_center_of_mass(vertices)
         offset_position = center + np.array(offset)
-        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels(
+            [offset_position], [
+                f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
-def add_weight_label_at_offset(plotter, center, label, label_id, offset=(0, 0, 0.5), show_labels=False, weights=False):
+def add_weight_label_at_offset(
+        plotter,
+        center,
+        label,
+        label_id,
+        offset=(
+            0,
+            0,
+            0.5),
+    show_labels=False,
+        weights=False):
     if show_labels or weights:
         offset_position = np.array(center) + np.array(offset)
-        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels(
+            [offset_position], [
+                f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
 def add_mesh_with_options(plotter, mesh, color, label, alpha):
@@ -290,7 +386,16 @@ def singularize_label(label):
     return label
 
 
-def process_component_or_weight(plotter, components, component_type, color_key, ids, COLORS, alpha, show_labels=False, weights=False):
+def process_component_or_weight(
+        plotter,
+        components,
+        component_type,
+        color_key,
+        ids,
+        COLORS,
+        alpha,
+        show_labels=False,
+        weights=False):
     singular_type = singularize_label(component_type)
 
     for component in components[component_type]:
@@ -312,9 +417,17 @@ def process_component_or_weight(plotter, components, component_type, color_key, 
                 label_text = f'{singular_type} {ids[color_key]}: {mass} lbs'
 
             plotter.add_mesh(
-                sphere_polydata, color=COLORS[color_key], show_edges=False, label=label_text)
+                sphere_polydata,
+                color=COLORS[color_key],
+                show_edges=False,
+                label=label_text)
             add_weight_label_at_offset(
-                plotter, center, singular_type, ids[color_key], show_labels=show_labels, weights=weights)
+                plotter,
+                center,
+                singular_type,
+                ids[color_key],
+                show_labels=show_labels,
+                weights=weights)
         else:
             if component_type == 'fuselages':
                 vertices, faces = generate_fuselage_vertices_and_faces(
@@ -328,12 +441,21 @@ def process_component_or_weight(plotter, components, component_type, color_key, 
                                   singular_type} {ids[color_key]}', alpha)
             if show_labels:
                 add_label_at_offset(
-                    plotter, vertices, singular_type, ids[color_key], show_labels=show_labels)
+                    plotter,
+                    vertices,
+                    singular_type,
+                    ids[color_key],
+                    show_labels=show_labels)
 
         ids[color_key] += 1
 
 
-def visualize_with_pyvista(components, show_labels=False, transparency=False, weights=False, background_image=None):
+def visualize_with_pyvista(
+        components,
+        show_labels=False,
+        transparency=False,
+        weights=False,
+        background_image=None):
     plotter = pv.Plotter()
 
     if background_image:
@@ -349,16 +471,30 @@ def visualize_with_pyvista(components, show_labels=False, transparency=False, we
     if weights:
         # Process weight components first
         for weight_type in ['tanks', 'ballasts', 'weights']:
-            process_component_or_weight(
-                plotter, components, weight_type, weight_type[:-1], ids, COLORS, alpha, show_labels=show_labels, weights=True)
+            process_component_or_weight(plotter,
+                                        components,
+                                        weight_type,
+                                        weight_type[:-1],
+                                        ids,
+                                        COLORS,
+                                        alpha,
+                                        show_labels=show_labels,
+                                        weights=True)
 
         # Add legend after all components are processed
         plotter.add_legend()
 
     # Process non-weight components
     for component_type in ['fuselages', 'wings', 'hstabs', 'vstabs', 'mstabs']:
-        process_component_or_weight(plotter, components, component_type,
-                                    component_type[:-1], ids, COLORS, alpha, show_labels=show_labels, weights=False)
+        process_component_or_weight(plotter,
+                                    components,
+                                    component_type,
+                                    component_type[:-1],
+                                    ids,
+                                    COLORS,
+                                    alpha,
+                                    show_labels=show_labels,
+                                    weights=False)
 
     if not weights:
         # Add legend after all components are processed
