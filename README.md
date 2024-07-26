@@ -32,7 +32,7 @@ A Python tool for visualizing YASim flight model XML data in 3D, using PyVista f
 2. **Install dependencies**:
 
     ```bash
-    pip install pyvista numpy
+    pip3 install pyvista numpy
     ```
 
 ## Usage
@@ -40,7 +40,7 @@ A Python tool for visualizing YASim flight model XML data in 3D, using PyVista f
 Run the script with the required arguments to visualize your YASim flight model:
 
 ```bash
-python yasimviz.py <xml_file> [options]
+python3 yasimviz.py <xml_file> [options]
 ```
 
 ### Arguments
@@ -56,25 +56,25 @@ python yasimviz.py <xml_file> [options]
 1. **Visualize without point labels and transparency**:
 
     ```bash
-    python yasimviz.py path/to/your/aircraft-yasim.xml
+    python3 yasimviz.py path/to/your/aircraft-yasim.xml
     ```
 
 2. **Visualize with point labels**:
 
     ```bash
-    python yasimviz.py path/to/your/aircraft-yasim.xml -l
+    python3 yasimviz.py path/to/your/aircraft-yasim.xml -l
     ```
 
 3. **Visualize with weight elements**:
 
     ```bash
-    python yasimviz.py path/to/your/aircraft-yasim.xml -w
+    python3 yasimviz.py path/to/your/aircraft-yasim.xml -w
     ```
 
 4. **Visualize with a custom background image and semi-transparency**:
 
     ```bash
-    python yasimviz.py path/to/your/aircraft-yasim.xml -t -b path/to/background.jpg
+    python3 yasimviz.py path/to/your/aircraft-yasim.xml -t -b path/to/background.jpg
     ```
 
 ## Functionality
