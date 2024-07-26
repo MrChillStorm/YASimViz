@@ -269,15 +269,13 @@ def add_label_at_offset(plotter, vertices, label, label_id, offset=(0, 0, 1), sh
     if show_labels:
         center = get_center_of_mass(vertices)
         offset_position = center + np.array(offset)
-        plotter.add_point_labels([offset_position], [f'{label} {
-                                 label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
 def add_weight_label_at_offset(plotter, center, label, label_id, offset=(0, 0, 0.5), show_labels=False, weights=False):
     if show_labels or weights:
         offset_position = np.array(center) + np.array(offset)
-        plotter.add_point_labels([offset_position], [f'{label} {
-                                 label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
 def add_mesh_with_options(plotter, mesh, color, label, alpha):
