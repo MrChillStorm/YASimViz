@@ -376,7 +376,7 @@ def add_weight_label_at_offset(
 
 
 def add_mesh_with_options(plotter, mesh, color, label, alpha):
-    plotter.add_mesh(mesh, color=color, show_edges=False,
+    plotter.add_mesh(mesh, color=color, show_edges=False, smooth_shading=True,
                      opacity=alpha, label=label)
 
 
@@ -421,6 +421,7 @@ def process_component_or_weight(
                 sphere_polydata,
                 color=COLORS[color_key],
                 show_edges=False,
+                smooth_shading=True,
                 label=label_text)
             add_weight_label_at_offset(
                 plotter,
