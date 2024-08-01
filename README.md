@@ -99,6 +99,7 @@ The script parses the YASim XML file to extract data related to various aircraft
 - **Down Arrow**: Zoom out.
 - **`t`**: Cycle transparency in increments of 0.1.
 - **`m` Key**: Toggles the measurement widget on and off.
+- **`o`**: Toggle between orthographic and perspective camera views.
 
 ## Code Overview
 
