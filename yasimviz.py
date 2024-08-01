@@ -14,7 +14,6 @@ WEIGHT_SPHERE_RADIUS = 0.20      # Radius of the weight item spheres
 # Low eye strain and high visibility colour settings
 COLORS = {
     'background': '#2e2e2e',  # Dark Gray
-    'filename': '#8c9abf',    # Light Blue Gray
     'cameramode': '#8c9abf',  # Light Blue Gray
     'fuselage': '#8b8b8b',    # Medium Gray
     'wing': '#8c9abf',        # Light Blue Gray
