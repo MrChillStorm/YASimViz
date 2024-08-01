@@ -7,7 +7,6 @@ import numpy as np
 import argparse
 
 POINT_LABEL_FONT_SIZE = 16       # Adjust point label font size to your preference
-FILENAME_FONT_SIZE = 14          # Adjust filename font size to your preference
 CAMERAMODE_FONT_SIZE = 10        # Adjust filename font size to your preference
 THICKNESS_TO_CHORD_RATIO = 0.12  # Sets flight surface thickness to a typical 12%
 WEIGHT_SPHERE_RADIUS = 0.20      # Radius of the weight item spheres
@@ -471,6 +470,9 @@ def visualize_with_pyvista(
         background_image=None):
     plotter = pv.Plotter()
 
+    # Set the title
+    plotter.title = f"YASimViz - {xml_file}"
+
     # Handle background image
     if background_image and os.path.isfile(background_image):
         try:
@@ -527,10 +529,6 @@ def visualize_with_pyvista(
     if not weights:
         # Add legend after all components are processed
         plotter.add_legend()
-
-    # Add the file name to the viewport
-    plotter.add_text(xml_file, position='upper_left',
-                     font_size=FILENAME_FONT_SIZE, color=COLORS['filename'])
 
     # Initialize the camera mode text
     camera_mode_text = plotter.add_text(
