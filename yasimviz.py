@@ -7,12 +7,16 @@ import numpy as np
 import argparse
 
 POINT_LABEL_FONT_SIZE = 16       # Adjust point label font size to your preference
+FILENAME_FONT_SIZE = 14          # Adjust filename font size to your preference
+CAMERAMODE_FONT_SIZE = 10        # Adjust filename font size to your preference
 THICKNESS_TO_CHORD_RATIO = 0.12  # Sets flight surface thickness to a typical 12%
 WEIGHT_SPHERE_RADIUS = 0.20      # Radius of the weight item spheres
 
 # Low eye strain and high visibility colour settings
 COLORS = {
     'background': '#2e2e2e',  # Dark Gray
+    'filename': '#8c9abf',    # Light Blue Gray
+    'cameramode': '#8c9abf',  # Light Blue Gray
     'fuselage': '#8b8b8b',    # Medium Gray
     'wing': '#8c9abf',        # Light Blue Gray
     'hstab': '#9da3b3',       # Light Steel Blue
@@ -460,6 +464,7 @@ def process_component_or_weight(
 
 def visualize_with_pyvista(
         components,
+        xml_file,
         show_labels=False,
         transparency=False,
         weights=False,
@@ -523,6 +528,17 @@ def visualize_with_pyvista(
         # Add legend after all components are processed
         plotter.add_legend()
 
+    # Add the file name to the viewport
+    plotter.add_text(xml_file, position='upper_left',
+                     font_size=FILENAME_FONT_SIZE, color=COLORS['filename'])
+
+    # Initialize the camera mode text
+    camera_mode_text = plotter.add_text(
+        'Camera: Perspective',
+        position='lower_left',
+        font_size=CAMERAMODE_FONT_SIZE,
+        color=COLORS['cameramode'])
+
     # Function to reset the view to head-on from the positive x-axis
     def reset_view():
         plotter.camera_position = [(10, 0, 0), (0, 0, 0), (0, 0, 1)]
@@ -575,6 +591,17 @@ def visualize_with_pyvista(
         plotter.render()
         measurement_state[0] = not measurement_state[0]
 
+    # Function to toggle between orthographic and perspective camera views and
+    # update text
+    def toggle_projection():
+        if plotter.camera.GetParallelProjection():
+            plotter.camera.ParallelProjectionOff()
+            camera_mode_text.SetText(0, 'Camera: Perspective')
+        else:
+            plotter.camera.ParallelProjectionOn()
+            camera_mode_text.SetText(0, 'Camera: Orthographic')
+        plotter.render()
+
     # Bind the reset view function to the 'c' key
     plotter.add_key_event('c', reset_view)
     plotter.add_key_event('x', rotate_x)
@@ -584,6 +611,7 @@ def visualize_with_pyvista(
     plotter.add_key_event('Down', zoom_out)
     plotter.add_key_event('t', cycle_transparency)
     plotter.add_key_event('m', toggle_measurement)
+    plotter.add_key_event('o', toggle_projection)
 
     # Show the plot
     plotter.show()
@@ -626,6 +654,7 @@ def main():
 
     visualize_with_pyvista(
         components,
+        xml_file=args.xml_file,
         show_labels=args.labels,
         transparency=args.transparency,
         weights=args.weights,
