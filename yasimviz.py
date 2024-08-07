@@ -165,6 +165,19 @@ def generate_fuselage_vertices_and_faces(fuselage, num_segments=16):
     mid_width = width
     back_width = width * taper
 
+    if midpoint == 0:
+        front_width = width
+        mid_width = width
+    elif midpoint == 1:
+        back_width = width
+        mid_width = width
+    elif taper == 1:
+        front_width = width
+        back_width = width
+        mid_width = width
+    elif midpoint != 0 or midpoint != 1:
+        mid_width = width * (9/8.51)*(9/8.97)  # The width mysteriously reduces by the factor when tapering
+
     # Calculate circular cross-sections
     front_vertices = generate_circular_vertices(
         front_center, front_width / 2, num_segments)
