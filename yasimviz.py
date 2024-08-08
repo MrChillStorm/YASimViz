@@ -176,7 +176,7 @@ def generate_fuselage_vertices_and_faces(fuselage, num_segments=16):
         back_width = width
         mid_width = width
     elif midpoint != 0 or midpoint != 1:
-        mid_width = width * (9/8.51)*(9/8.97)  # The width mysteriously reduces by the factor when tapering
+        mid_width = width
 
     # Calculate circular cross-sections
     front_vertices = generate_circular_vertices(
@@ -367,9 +367,7 @@ def add_label_at_offset(
     if show_labels:
         center = get_center_of_mass(vertices)
         offset_position = center + np.array(offset)
-        plotter.add_point_labels(
-            [offset_position], [
-                f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
 def add_weight_label_at_offset(
@@ -385,14 +383,11 @@ def add_weight_label_at_offset(
         weights=False):
     if show_labels or weights:
         offset_position = np.array(center) + np.array(offset)
-        plotter.add_point_labels(
-            [offset_position], [
-                f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
+        plotter.add_point_labels([offset_position], [f'{label} {label_id}'], font_size=POINT_LABEL_FONT_SIZE, bold=True)
 
 
 def add_mesh_with_options(plotter, mesh, color, label, alpha):
-    plotter.add_mesh(mesh, color=color, show_edges=False, smooth_shading=True,
-                     opacity=alpha, label=label)
+    plotter.add_mesh(mesh, color=color, show_edges=False, smooth_shading=True, opacity=alpha, label=label)
 
 
 def singularize_label(label):
@@ -454,14 +449,8 @@ def process_component_or_weight(
                     component, component_type)
             faces = np.hstack([[len(face)] + face for face in faces])
             mesh = pv.PolyData(vertices, faces)
-            smoothed_mesh = mesh.smooth(n_iter=20, relaxation_factor=0.01)
-            add_mesh_with_options(
-                plotter,
-                smoothed_mesh,
-                COLORS[color_key],
-                f'{singular_type} {
-                    ids[color_key]}',
-                alpha)
+            smoothed_mesh = mesh.smooth(n_iter=0, relaxation_factor=0)
+            add_mesh_with_options(plotter, smoothed_mesh, COLORS[color_key], f'{singular_type} {ids[color_key]}', alpha)
             if show_labels:
                 add_label_at_offset(
                     plotter,
