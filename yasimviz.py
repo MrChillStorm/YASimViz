@@ -644,9 +644,7 @@ def main():
 
     # Check if background image file exists (if provided)
     if args.background_image and not os.path.isfile(args.background_image):
-        print(
-            f"Warning: The background image file '{
-                args.background_image}' does not exist. It will be ignored.")
+        print(f"Warning: The background image file '{args.background_image}' does not exist. It will be ignored.")
         background_image = None
     else:
         background_image = args.background_image
