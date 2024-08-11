@@ -332,7 +332,7 @@ def generate_component_vertices_and_faces(component, component_type):
 
     # If the component is on the negative side of the y-axis, mirror it and
     # offset it to the correct side
-    if y < 0:
+    if y < 0 and component_type != 'vstabs':
         final_vertices[:, 1] = -final_vertices[:, 1] - 2 * abs(y)
 
     return final_vertices, faces
